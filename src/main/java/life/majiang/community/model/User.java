@@ -1,4 +1,4 @@
-package life.majiang.community.community.model;
+package life.majiang.community.model;
 
 public class User {
     private Integer id;

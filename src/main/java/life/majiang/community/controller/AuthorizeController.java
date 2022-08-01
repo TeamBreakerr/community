@@ -1,11 +1,10 @@
-package life.majiang.community.community.controller;
+package life.majiang.community.controller;
 
-import com.sun.org.omg.CORBA.RepositoryIdSeqHelper;
-import life.majiang.community.community.dto.AccessTokenDTO;
-import life.majiang.community.community.dto.GithubUser;
-import life.majiang.community.community.mapper.UserMapper;
-import life.majiang.community.community.model.User;
-import life.majiang.community.community.provider.GithubProvider;
+import life.majiang.community.dto.AccessTokenDTO;
+import life.majiang.community.dto.GithubUser;
+import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.model.User;
+import life.majiang.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
