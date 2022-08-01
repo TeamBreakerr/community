@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class GithubProvider {
     public String getAccessToken(AccessTokenDTO accessTokenDTO) throws IOException {
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(50000, TimeUnit.MILLISECONDS)
+                .readTimeout(50000, TimeUnit.MILLISECONDS)
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         RequestBody body = RequestBody.create(objectMapper.writeValueAsBytes(accessTokenDTO), JSON);
