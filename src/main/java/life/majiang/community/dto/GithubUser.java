@@ -1,7 +1,5 @@
 package life.majiang.community.dto;
 
-import org.springframework.scheduling.support.SimpleTriggerContext;
-
 public class GithubUser {
     private String name;
     private String id;
