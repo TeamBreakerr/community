@@ -31,6 +31,10 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                <li th:if="${session.user != null}">
+                    <a href="/publish">发布</a>
+                </li>
+
                 <li th:if="${session.user == null}"><a href ="https://github.com/login/oauth/authorize?client_id=35acd0f812ecddcf9a09&redirect_uri=http://localhost:8087/callback&scope=user&state=1">登录</a></li>
 
                 <li class="dropdown" th:if="${session.user != null}">
