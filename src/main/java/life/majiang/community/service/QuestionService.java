@@ -23,6 +23,15 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
+    public QuestionDTO getById(String id) {
+        Question question = questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question, questionDTO);
+        User user = userMapper.getById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
+
     public PaginationDTO list(Integer page, Integer size) {
         PageHelper.startPage(page, size);
         List<Question> questionList = questionMapper.list();
