@@ -1,7 +1,6 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.dto.PaginationDTO;
-import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.User;
 import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProfileController {
-    @Autowired
-    private UserMapper userMapper;
-
     @Autowired
     private QuestionService questionService;
 

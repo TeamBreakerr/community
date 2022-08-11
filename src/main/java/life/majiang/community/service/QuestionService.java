@@ -23,7 +23,7 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public QuestionDTO getById(String id) {
+    public QuestionDTO getById(Integer id) {
         Question question = questionMapper.getById(id);
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
@@ -71,4 +71,15 @@ public class QuestionService {
         return paginationDTO;
     }
 
+    public void createOrUpdate(Question question) {
+        Question dbQuestion = questionMapper.getById(question.getId());
+        if (dbQuestion == null) {
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.create(question);
+        }else {
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.update(question);
+        }
+    }
 }
