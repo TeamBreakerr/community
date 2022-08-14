@@ -7,6 +7,7 @@ import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
+import life.majiang.community.model.QuestionExample;
 import life.majiang.community.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,21 +25,21 @@ public class QuestionService {
     private UserMapper userMapper;
 
     public QuestionDTO getById(Integer id) {
-        Question question = questionMapper.getById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
-        User user = userMapper.getById(question.getCreator());
+        User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
 
     public PaginationDTO list(Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        List<Question> questionList = questionMapper.list();
+        List<Question> questionList = questionMapper.selectByExample(new QuestionExample());
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
-            User user = userMapper.getById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -53,11 +54,13 @@ public class QuestionService {
     }
     public PaginationDTO list(Integer userId, Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        List<Question> questionList = questionMapper.listByUserId(userId);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andCreatorEqualTo(userId);
+        List<Question> questionList = questionMapper.selectByExample(questionExample);
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
-            User user = userMapper.getById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -72,14 +75,15 @@ public class QuestionService {
     }
 
     public void createOrUpdate(Question question) {
-        Question dbQuestion = questionMapper.getById(question.getId());
-        if (dbQuestion == null) {
+        if (question.getId() == null) {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            questionMapper.insertSelective(question);
         }else {
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.update(question);
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(question, questionExample);
         }
     }
 }
