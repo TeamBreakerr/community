@@ -1,9 +1,9 @@
 package life.majiang.community.controller;
 
-import life.majiang.community.dto.CommentDTO;
+import life.majiang.community.dto.CommentCreateDTO;
 import life.majiang.community.dto.ResultDTO;
 import life.majiang.community.exception.CustomizeErrorCode;
-import life.majiang.community.mapper.CommentMapper;
+import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.model.Comment;
 import life.majiang.community.model.User;
 import life.majiang.community.service.CommentService;
@@ -28,13 +28,13 @@ public class CommentController {
     @ResponseBody
     //映射到/comment的post请求
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDTO commentDTO,
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request) {
         //异常处理
         //未登录的情况
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-
+            throw new CustomizeException(CustomizeErrorCode.NO_LOGIN);
         }
         //将评论插入到数据库中
         //    id
@@ -49,9 +49,9 @@ public class CommentController {
         comment.setCommentator(user.getId());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(System.currentTimeMillis());
-        comment.setParentId(commentDTO.getParentId());
-        comment.setType(commentDTO.getType());
-        comment.setContent(commentDTO.getContent());
+        comment.setParentId(commentCreateDTO.getParentId());
+        comment.setType(commentCreateDTO.getType());
+        comment.setContent(commentCreateDTO.getContent());
         commentService.insert(comment);
 
         //需要return给前端一个dto类，该类会被序列化为json

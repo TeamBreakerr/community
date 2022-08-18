@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class CustomizeExceptionHandler {
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(CustomizeException.class)
     @ResponseBody
     Object handle(Throwable e, Model model, HttpServletRequest request) {
         String contentType = request.getContentType();

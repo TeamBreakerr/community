@@ -1,15 +1,24 @@
 package life.majiang.community.service;
 
+import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.CommentMapper;
 import life.majiang.community.mapper.QuestionExtMapper;
 import life.majiang.community.mapper.QuestionMapper;
-import life.majiang.community.model.Comment;
-import life.majiang.community.model.Question;
+import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.model.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -22,6 +31,10 @@ public class CommentService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Transactional
     public void insert(Comment comment) {
         //异常处理
         if (comment.getParentId() == null || comment.getParentId() == 0) {
@@ -51,5 +64,35 @@ public class CommentService {
             }
             commentMapper.insertSelective(comment);
         }
+    }
+
+    //通过问题id找到问题下的回复，并包装成CommentDTO
+    public List<CommentDTO> list(Integer id) {
+        //找到了所有的回复
+        CommentExample commentExample = new CommentExample();
+        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.COMMENT.getType());
+        List<Comment> commentList = commentMapper.selectByExample(commentExample);
+        if (commentList.size() == 0)
+            return new ArrayList<>();
+        //要把每条回复和创建者的信息绑定，展示该回复者的头像和昵称
+
+        //取出所有评论的用户id
+        Set<Integer> userIdSet = commentList.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
+        List<Integer> UserIdList = new ArrayList();
+        UserIdList.addAll(userIdSet);
+        //从数据库中找出所有的用户信息
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdIn(UserIdList);
+        List<User> userList = userMapper.selectByExample(userExample);
+        Map<Integer, User> userMap = userList.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
+
+        List<CommentDTO> commentDTOList = commentList.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUser(userMap.get(comment.getCommentator()));
+            return commentDTO;
+        }).collect(Collectors.toList());
+
+        return commentDTOList;
     }
 }
