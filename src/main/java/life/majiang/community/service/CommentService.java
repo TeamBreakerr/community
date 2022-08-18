@@ -71,6 +71,7 @@ public class CommentService {
         //找到了所有的回复
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.COMMENT.getType());
+        commentExample.setOrderByClause("gmt_create desc");
         List<Comment> commentList = commentMapper.selectByExample(commentExample);
         if (commentList.size() == 0)
             return new ArrayList<>();
