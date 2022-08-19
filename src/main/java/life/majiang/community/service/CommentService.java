@@ -67,10 +67,10 @@ public class CommentService {
     }
 
     //通过问题id找到问题下的回复，并包装成CommentDTO
-    public List<CommentDTO> list(Integer id) {
+    public List<CommentDTO> listByTargetId(Integer id, CommentTypeEnum commentTypeEnum) {
         //找到了所有的回复
         CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.COMMENT.getType());
+        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(commentTypeEnum.getType());
         commentExample.setOrderByClause("gmt_create desc");
         List<Comment> commentList = commentMapper.selectByExample(commentExample);
         if (commentList.size() == 0)

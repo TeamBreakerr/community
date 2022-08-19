@@ -2,6 +2,7 @@ package life.majiang.community.controller;
 
 import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.dto.QuestionDTO;
+import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.service.CommentService;
 import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class QuestionController {
         questionService.incView(id);
         model.addAttribute("question", questionDTO);
 
-        List<CommentDTO> commentDTOList = commentService.list(id);
+        List<CommentDTO> commentDTOList = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
         model.addAttribute("comments", commentDTOList);
         return "question";
     }

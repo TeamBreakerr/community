@@ -1,7 +1,9 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.dto.CommentCreateDTO;
+import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.dto.ResultDTO;
+import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.model.Comment;
@@ -10,12 +12,10 @@ import life.majiang.community.service.CommentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -60,5 +60,12 @@ public class CommentController {
 
         //需要return给前端一个dto类，该类会被序列化为json
         return ResultDTO.errorOf(CustomizeErrorCode.SUCCESS);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Integer id) {
+        List<CommentDTO> commentDTOList = commentService.listByTargetId(id, CommentTypeEnum.REPLY);
+        return ResultDTO.okOf(commentDTOList);
     }
 }
