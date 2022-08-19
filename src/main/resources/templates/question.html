@@ -62,9 +62,11 @@
                             </h5>
                             <div th:text="${comment.content}"></div>
                             <div class="menu">
-                                <span class="iconfont icon-good icon"></span>
-                                <span th:data-id="${comment.id}" onclick="collapseComments(this)">
-                                    <span class="iconfont icon-comments icon"></span>
+                                <span class="iconfont icon-good"></span>
+                                <span th:data-id="${comment.id}" onclick="collapseComments(this)"
+                                      class="comment-icon">
+                                    <span class="iconfont icon-comments"></span>
+                                    <span th:text="${comment.commentCount}"></span>
                                 </span>
                                 <span class="pull-right"
                                       th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
