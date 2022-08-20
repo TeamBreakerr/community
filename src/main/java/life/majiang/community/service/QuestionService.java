@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -43,7 +44,9 @@ public class QuestionService {
 
     public PaginationDTO list(Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        List<Question> questionList = questionMapper.selectByExample(new QuestionExample());
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questionList = questionMapper.selectByExample(questionExample);
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
@@ -60,6 +63,7 @@ public class QuestionService {
 
         return paginationDTO;
     }
+
     public PaginationDTO list(Integer userId, Integer page, Integer size) {
         PageHelper.startPage(page, size);
         QuestionExample questionExample = new QuestionExample();
@@ -87,7 +91,7 @@ public class QuestionService {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insertSelective(question);
-        }else {
+        } else {
             question.setGmtModified(question.getGmtCreate());
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
@@ -99,5 +103,19 @@ public class QuestionService {
 
     public void incView(Integer id) {
         questionExtMapper.incView(id);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        String regexp = questionDTO.getTag().replace(',', '|');
+        question.setTag(regexp);
+        List<Question> questionList = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOList = questionList.stream().map(q -> {
+            QuestionDTO dto = new QuestionDTO();
+            BeanUtils.copyProperties(q, dto);
+            return dto;
+        }).collect(Collectors.toList());
+        return questionDTOList;
     }
 }

@@ -1,53 +1,78 @@
 body {
     background-color: #efefef;
 }
+
 .main {
     background-color: white;
     margin: 30px;
 }
+
 .btn-publish {
     float: right;
     margin-bottom: 15px;
 }
+
 .media-object {
     width: 38px;
     height: 38px;
 }
+
 .media-body {
     padding-top: 10px;
 }
+
 .text-desc {
     font-size: 12px;
     font-weight: normal;
     color: #999;
 }
+
 .profile .section {
     margin-top: 15px;
 }
+
 .question-title {
     margin-top: 25px;
 }
+
+.question-tag {
+    margin-right: 5px;
+}
+
+.question-related {
+    line-height: 20px;
+    font-size: 12px;
+    margin-left: 0;
+    list-style: none;
+    padding-left: 0;
+}
+
 .community-menu {
     display: block;
     color: #999;
     font-size: 13px;
     margin-bottom: 15px;
 }
+
 .jumbotron {
     margin: 50px;
 }
+
 .comment {
     margin: 10px 0;
 }
+
 .btn-comment {
     float: right;
     margin-bottom: 10px;
 }
+
 .comments {
     padding-bottom: 5px;
     margin-bottom: 15px;
     border-bottom: 1px solid #eee;
 }
+
 .sub-comments {
     border-radius: 5px;
     margin-top: 10px;
@@ -63,10 +88,12 @@ body {
 .comment-sp {
     margin-top: 0;
 }
+
 .menu {
     color: #999;
     margin-top: 5px;
 }
+
 .menu .iconfont {
     font-family: "iconfont" !important;
     font-size: 20px;
@@ -87,6 +114,7 @@ body {
 .menu .active {
     color: #499ef3;
 }
+
 .menu .icon:hover {
     color: #499ef3;
 }

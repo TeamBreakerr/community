@@ -31,6 +31,10 @@ public class QuestionController {
 
         List<CommentDTO> commentDTOList = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
         model.addAttribute("comments", commentDTOList);
+
+        //根据tag查找相关问题
+        List<QuestionDTO> questionDTORelated = questionService.selectRelated(questionDTO);
+        model.addAttribute("relatedQuestions", questionDTORelated);
         return "question";
     }
 }
