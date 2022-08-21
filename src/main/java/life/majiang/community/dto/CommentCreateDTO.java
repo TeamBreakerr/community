@@ -7,4 +7,5 @@ public class CommentCreateDTO {
     private String content;
     private Integer parentId;
     private Integer type;
+    private Integer questionId;
 }

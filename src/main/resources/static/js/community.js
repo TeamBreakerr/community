@@ -4,10 +4,10 @@
 function post() {
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
-    comment2target(questionId, 1, content);
+    comment2target(questionId, 1, content, questionId);
 }
 
-function comment2target(targetId, type, content) {
+function comment2target(targetId, type, content, questionId) {
     if (!content) {
         alert("不能回复空内容~~~");
         return;
@@ -19,7 +19,8 @@ function comment2target(targetId, type, content) {
         data: JSON.stringify({
             "parentId": targetId,
             "content": content,
-            "type": type
+            "type": type,
+            "questionId": questionId
         }),
         success: function (response) {
             if (response.code == 200) {
@@ -43,7 +44,8 @@ function comment2target(targetId, type, content) {
 function comment(e) {
     var commentId = e.getAttribute("data-id");
     var content = $("#input-" + commentId).val();
-    comment2target(commentId, 2, content);
+    var questionId = $("#question_id").val();
+    comment2target(commentId, 2, content, questionId);
 }
 
 /**

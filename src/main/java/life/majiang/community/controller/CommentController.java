@@ -56,6 +56,7 @@ public class CommentController {
         comment.setParentId(commentCreateDTO.getParentId());
         comment.setType(commentCreateDTO.getType());
         comment.setContent(commentCreateDTO.getContent());
+        comment.setQuestionId(commentCreateDTO.getQuestionId());
         commentService.insert(comment);
 
         //需要return给前端一个dto类，该类会被序列化为json

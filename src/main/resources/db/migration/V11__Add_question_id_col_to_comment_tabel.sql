@@ -1,0 +1,1 @@
+ALTER TABLE COMMENT ADD question_id INT NULL;

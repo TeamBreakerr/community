@@ -1,6 +1,10 @@
 package life.majiang.community.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import life.majiang.community.dto.CommentDTO;
+import life.majiang.community.dto.PaginationDTO;
+import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
@@ -34,6 +38,9 @@ public class CommentService {
     @Autowired
     private CommentExtMapper commentExtMapper;
 
+    @Autowired
+    private NotificationService  notificationService;
+
     @Transactional
     public void insert(Comment comment) {
         //异常处理
@@ -55,6 +62,7 @@ public class CommentService {
             commentMapper.insertSelective(comment);
             //评论数加一
             questionExtMapper.incCommentCount(question.getId());
+            notificationService.insert(comment);
         } else {
             //回复
             //检查回复的评论是否存在
@@ -65,6 +73,7 @@ public class CommentService {
             commentMapper.insertSelective(comment);
             //回复数加一
             commentExtMapper.incCommentCount(comment.getParentId());
+            notificationService.insert(comment);
         }
     }
 

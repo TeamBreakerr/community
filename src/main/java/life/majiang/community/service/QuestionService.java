@@ -57,7 +57,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         PaginationDTO paginationDTO = new PaginationDTO();
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         PageInfo pageInfo = new PageInfo(questionList);
         paginationDTO.setPagination(pageInfo);
 
@@ -79,7 +79,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         PaginationDTO paginationDTO = new PaginationDTO();
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         PageInfo pageInfo = new PageInfo(questionList);
         paginationDTO.setPagination(pageInfo);
 
