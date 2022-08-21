@@ -7,6 +7,8 @@ import life.majiang.community.dto.PaginationDTO;
 import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.enums.NotificationTypeEnum;
+import life.majiang.community.exception.CustomizeErrorCode;
+import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.CommentMapper;
 import life.majiang.community.mapper.NotificationMapper;
 import life.majiang.community.mapper.UserMapper;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,5 +89,16 @@ public class NotificationService {
         paginationDTO.setPagination(pageInfo);
 
         return paginationDTO;
+    }
+
+    public Notification read(Integer id, User user) {
+        Notification notification = notificationMapper.selectByPrimaryKey(id);
+        if (notification == null) {
+            throw new CustomizeException(CustomizeErrorCode.NOTIFICATION_NOT_FOUND);
+        }
+        if (!Objects.equals(notification.getReceiver(), user.getId())) {
+            throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAIL);
+        }
+        return notification;
     }
 }
