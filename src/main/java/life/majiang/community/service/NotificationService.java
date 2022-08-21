@@ -6,6 +6,7 @@ import life.majiang.community.dto.NotificationDTO;
 import life.majiang.community.dto.PaginationDTO;
 import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.enums.CommentTypeEnum;
+import life.majiang.community.enums.NotificationStatusEnum;
 import life.majiang.community.enums.NotificationTypeEnum;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
@@ -74,6 +75,7 @@ public class NotificationService {
         PageHelper.startPage(page, size);
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria().andReceiverEqualTo(id);
+        notificationExample.setOrderByClause("gmt_create desc");
         List<Notification> notificationList = notificationMapper.selectByExample(notificationExample);
         List<NotificationDTO> notificationDTOList = notificationList.stream().map(notification -> {
             NotificationDTO notificationDTO = new NotificationDTO();
@@ -99,6 +101,16 @@ public class NotificationService {
         if (!Objects.equals(notification.getReceiver(), user.getId())) {
             throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAIL);
         }
+        //设置成已读
+        notification.setStatus(NotificationStatusEnum.READ.getStatus());
+        notificationMapper.updateByPrimaryKey(notification);
         return notification;
+    }
+
+    public Long unreadCount(Integer id) {
+        NotificationExample notificationExample = new NotificationExample();
+        notificationExample.createCriteria().andReceiverEqualTo(id).andStatusEqualTo(NotificationStatusEnum.UNREAD.getStatus());
+        long count = notificationMapper.countByExample(notificationExample);
+        return count;
     }
 }
