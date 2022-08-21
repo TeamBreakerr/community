@@ -18,6 +18,10 @@
     <script src="/js/community.js" type="application/javascript"></script>
     <script src="/js/moment.js" type="application/javascript"></script>
     <link rel="stylesheet" href="//at.alicdn.com/t/c/font_3598103_zd622wg1hoh.css">
+    <link rel="stylesheet" href="/editor.md/css/editormd.preview.min.css">
+    <script src="/editor.md/editormd.min.js" type="application/javascript"></script>
+    <script src="/editor.md/lib/marked.min.js"></script>
+    <script src="/editor.md/lib/prettify.min.js"></script>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
@@ -35,7 +39,14 @@
             </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <!--内容-->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}"></div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
+                    <textarea style="display:none;" th:text="${question.description}"></textarea>
+                </div>
+                <script type="text/javascript">
+                    $(function () {
+                        editormd.markdownToHTML("question-view", {});
+                    });
+                </script>
                 <!--标签-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
