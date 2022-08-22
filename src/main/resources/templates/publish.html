@@ -17,7 +17,6 @@
     <script src="/js/community.js" type="application/javascript"></script>
     <link rel="stylesheet" href="/editor.md/css/editormd.css"/>
     <script src="/editor.md/editormd.min.js"></script>
-    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 </head>
 
 <body>
@@ -51,7 +50,10 @@
                             path: "/editor.md/lib/",
                             delay: 0,
                             watch: false,
-                            placeholder: "请输入问题描述"
+                            placeholder: "请输入问题描述",
+                            imageUpload: true,
+                            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                            imageUploadURL: "/file/upload",
                         });
                     });
                 </script>
