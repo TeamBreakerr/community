@@ -11,4 +11,6 @@ public interface QuestionExtMapper {
     int incCommentCount(Integer id);
     //查询tag标签相关的问题
     List<Question> selectRelated(Question question);
+
+    List<Question> selectBySearch(String searchRegexp);
 }

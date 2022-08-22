@@ -12,11 +12,13 @@ import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
 import life.majiang.community.model.QuestionExample;
 import life.majiang.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,11 +44,17 @@ public class QuestionService {
         return questionDTO;
     }
 
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO listBySearch(String search, Integer page, Integer size) {
+        String searchRegexp = "";
+        if (StringUtils.isNotBlank(search)) {
+            String[] tags = StringUtils.split(search, " ");
+            searchRegexp = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+        
         PageHelper.startPage(page, size);
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questionList = questionMapper.selectByExample(questionExample);
+        List<Question> questionList = questionExtMapper.selectBySearch(searchRegexp);
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
@@ -64,7 +72,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO listByUser(Integer userId, Integer page, Integer size) {
         PageHelper.startPage(page, size);
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(userId);
